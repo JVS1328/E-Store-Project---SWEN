@@ -1,0 +1,86 @@
+commit 1a4f17371ce5d8111c9f822d88f9968b800c0761
+Author: Bahlph <chickensaver3@gmail.com>
+Date:   Tue Sep 13 19:40:54 2022 -0400
+
+    Added name to README.md
+
+commit 196f78727b1dee159cd197c4ef05b3cad6db6877
+Merge: 3e9d45e 2d4b339
+Author: Bahlph <chickensaver3@gmail.com>
+Date:   Tue Sep 13 19:40:01 2022 -0400
+
+    Merge branch 'main' of https://github.com/RIT-SWEN-261-04/2221-swen-261-04-f-README
+
+commit 3e9d45efd0c9d543e6b29a41773f7d43bcef013c
+Merge: c825c45 678226f
+Author: Bahlph <chickensaver3@gmail.com>
+Date:   Tue Sep 13 19:38:14 2022 -0400
+
+    Merge branch 'main' of https://github.com/RIT-SWEN-261-04/2221-swen-261-04-f-README
+    
+    # Conflicts:
+    #       README.md
+
+commit 2d4b339d103a69b9c433dcf9de4b9ed6455f5a1b
+Merge: 7b5c763 678226f
+Author: KevinPark020 <103702700+KevinPark020@users.noreply.github.com>
+Date:   Tue Sep 13 19:37:57 2022 -0400
+
+    Merge branch 'main' of https://github.com/RIT-SWEN-261-04/team-project-261-04-team-6
+
+commit 7b5c763354e4a6e1caef6ff9ae60a1a1343cfc4e
+Merge: 16ed38d 76478e7
+Author: KevinPark020 <103702700+KevinPark020@users.noreply.github.com>
+Date:   Tue Sep 13 19:35:09 2022 -0400
+
+    Merge branch 'main' of https://github.com/RIT-SWEN-261-04/team-project-261-04-team-6
+
+commit 678226f353a80f96cfade5fab36da47d3bae4707
+Merge: 2a4e3ef 76478e7
+Author: pch2910 <ch@dorper.me>
+Date:   Tue Sep 13 16:34:29 2022 -0700
+
+    Merge branch 'main' of https://github.com/RIT-SWEN-261-04/2221-swen-261-04-f-README
+
+commit 16ed38d03d7170b95804258f67120c012700e656
+Merge: d5cd207 387e36f
+Author: KevinPark020 <103702700+KevinPark020@users.noreply.github.com>
+Date:   Tue Sep 13 19:34:27 2022 -0400
+
+    adding Kevin's name
+
+commit 2a4e3ef3bbf281660683483ea1f50b533adbd5c7
+Author: pch2910 <ch@dorper.me>
+Date:   Tue Sep 13 16:33:43 2022 -0700
+
+    iaaax
+
+commit 76478e79cf238e89c6f018cb418b7cefb7406186
+Author: = <hridizaroy@gmail.com>
+Date:   Tue Sep 13 19:33:39 2022 -0400
+
+    Added name in README - Hridiza
+
+commit d5cd207c9002dd7b334b0efb23cca420fa7dceef
+Author: KevinPark020 <103702700+KevinPark020@users.noreply.github.com>
+Date:   Tue Sep 13 19:33:10 2022 -0400
+
+    adding Kevin Park - name -
+
+commit 387e36f959557252cf25c2dee96563ca1431ede2
+Author: JVS1328 <jvs1328@rit.edu>
+Date:   Tue Sep 13 19:31:57 2022 -0400
+
+    Added name to Member 1
+
+commit c825c457673068bf23c62accbf0cedb4c53cf01c
+Author: Bahlph <chickensaver3@gmail.com>
+Date:   Tue Sep 13 19:31:28 2022 -0400
+
+    Added name to README.md
+
+commit 5dd15a0329a70eff7a60898857b639748e5ac8d2
+Author: github-classroom[bot] <66690702+github-classroom[bot]@users.noreply.github.com>
+Date:   Tue Sep 13 23:08:56 2022 +0000
+
+    Initial commit

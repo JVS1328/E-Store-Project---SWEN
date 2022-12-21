@@ -1,0 +1,13 @@
+<app-navbar></app-navbar>
+<router-outlet></router-outlet>
+<div *ngIf="path=='/'">
+	<div class="jumbo">
+		<h1>Welcome to Paul's Haul of Cars store!</h1>
+		<div class="sub">Your one stop shop for all your used car needs.</div>
+		<div><a href="/products" class="button">View Cars</a></div>
+	</div>
+</div>
+<!--
+<div id="debug">
+	<div>token: {{UAM.getToken()}}</div>
+</div>-->

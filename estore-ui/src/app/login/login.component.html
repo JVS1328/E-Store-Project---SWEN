@@ -1,0 +1,22 @@
+<div *ngIf="errorMessage != ''">
+	<b>{{errorMessage}}</b>
+</div>
+
+<div class = "form">
+    <ul class = "options">
+        <li class = "left" [ngClass]="{active: is_login}" (click)="show_login()">Login</li>
+        <li class = "right" [ngClass]="{active: !is_login}" (click)="show_signup()">Sign up</li>
+    </ul>
+    <div class="login-form" *ngIf="is_login">
+        <input #login_username type="text" name="username" class = "form-item" required placeholder="Username" [(ngModel)]="username">
+        <input #login_password type="password" name="password" class = "form-item" required placeholder="Password" [(ngModel)]="password">
+        <button class="submit-btn submit-login" (click)="login()">Submit</button>
+    </div>
+    <div class="register-form" *ngIf="!is_login">
+        <input type="text" name="first_name" class = "form-item" required placeholder="First Name">
+        <input type="text" name="last_name" class = "form-item" required placeholder="Last Name">
+        <input type="text" name="username" class = "form-item" required placeholder="Username" [(ngModel)]="reg_username">
+        <input type="password" name="password" class = "form-item" required placeholder="Password" [(ngModel)]="reg_password">
+        <button class="submit-btn submit-signup" (click)="register()">Submit</button>
+    </div>
+</div>

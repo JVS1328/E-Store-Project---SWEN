@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>User.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">estore-api</a> &gt; <a href="index.source.html" class="el_package">com.estore.api.estoreapi.model</a> &gt; <span class="el_source">User.java</span></div><h1>User.java</h1><pre class="source lang-java linenums">package com.estore.api.estoreapi.model;
+import java.util.logging.Logger;
+
+import com.estore.api.estoreapi.persistence.Identified;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+/**
+ * Represents a User object.
+ * 
+ * @author John Skorcik, Paul Harrison
+ */
+public class User extends Identified {
+<span class="fc" id="L13">    private static final Logger LOG = Logger.getLogger(User.class.getName());</span>
+
+    //Testing stuff?
+    static final String STRING_FORMAT = &quot;User [id=%d, username=%s]&quot;;
+    
+    @JsonProperty(&quot;admin&quot;) private boolean admin;
+    @JsonProperty(&quot;username&quot;) private String username;
+    @JsonProperty(&quot;password&quot;) private String password;
+    @JsonProperty(&quot;cart&quot;) private Cart cart;
+
+    /**
+     * Create a User with a given ID and user.
+     * @param id	ID of the User
+     * @param name	Name of the user
+     * 
+     * {@literal @}JsonProperty is used in serialization and deserialization
+     * of the JSON object to the Java object in mapping the fields.  If a field
+     * is not provided in the JSON object, the Java field gets the default Java
+     * value, i.e. 0 for int
+     */
+    public User(
+    		@JsonProperty(&quot;id&quot;) int id,
+<span class="fc" id="L35">    		@JsonProperty(&quot;username&quot;) String username) {</span>
+<span class="fc" id="L36">        this.id = id;</span>
+<span class="fc" id="L37">        this.username = username;</span>
+<span class="fc" id="L38">        this.admin = false;</span>
+        
+        // each user has just one shopping cart that will be stored with the user
+<span class="fc" id="L41">        this.cart = new Cart();</span>
+<span class="fc" id="L42">    }</span>
+    
+    public User(
+    		String username,
+<span class="fc" id="L46">    		String password) {</span>
+<span class="fc" id="L47">        this.username = username;</span>
+<span class="fc" id="L48">        this.password = password;</span>
+        
+        // each user has just one shopping cart that will be stored with the user
+<span class="fc" id="L51">        this.cart = new Cart();</span>
+<span class="fc" id="L52">    }</span>
+
+    /**
+     * Retrieves the name of the product
+     * @return The name of the user
+     */
+<span class="fc" id="L58">    public String getName() {return username;}</span>
+
+    /**
+     * Retrieves the user's cart.
+     * @return the Cart of the user.
+     */
+<span class="fc" id="L64">    public Cart getCart() {return cart;}</span>
+
+    /**
+     * Checks if user is administrator
+     * @return true if is administrator
+     */
+<span class="fc" id="L70">    public boolean isAdmin() {return admin;}</span>
+    
+    /**
+     * Makes a user administrator
+     */
+<span class="fc" id="L75">    public void makeAdmin() {admin = true;}</span>
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+<span class="nc" id="L82">        return String.format(STRING_FORMAT,id,username);</span>
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+<span class="fc" id="L88">        User that = (User)o;</span>
+<span class="fc bfc" id="L89" title="All 4 branches covered.">        return (this.id == that.id) &amp;&amp; (this.username == that.username);</span>
+    }
+
+    /**
+     * Check user password
+     * @param password2 password to check against user password
+     * @return true if password matches
+     * @author Paul Harrison
+     */
+	public boolean checkPassword(String password2) {
+<span class="nc" id="L99">		return password2.equals(password);</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

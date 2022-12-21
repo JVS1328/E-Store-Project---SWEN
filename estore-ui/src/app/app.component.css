@@ -1,0 +1,23 @@
+*, html {
+    margin:0;
+    padding:0;  
+}
+
+body {
+	margin: 0;
+	padding: 0;
+}
+
+.jumbo {
+	font-size: 32pt;
+	text-align: center;
+}
+
+.jumbo .sub {
+	margin-bottom: 16px;
+}
+
+.jumbo a.button {
+	font-size: inherit;
+	padding: 8px;
+}

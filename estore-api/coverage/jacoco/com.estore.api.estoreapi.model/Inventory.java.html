@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Inventory.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">estore-api</a> &gt; <a href="index.source.html" class="el_package">com.estore.api.estoreapi.model</a> &gt; <span class="el_source">Inventory.java</span></div><h1>Inventory.java</h1><pre class="source lang-java linenums">package com.estore.api.estoreapi.model;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.logging.Logger;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import com.estore.api.estoreapi.persistence.BasicPersistence;
+import com.estore.api.estoreapi.persistence.InventoryDAO;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+/**
+ * Represents a inventory object.
+ * @author Kevin Park, Hridiza Roy, Benson Haley
+ */
+@Component
+public class Inventory extends BasicPersistence&lt;Product&gt; implements InventoryDAO {
+
+<span class="fc" id="L24">    private static final Logger LOG = Logger.getLogger(Inventory.class.getName());</span>
+    
+    /**
+     * Creates a Product File Data Access Object
+     * 
+     * @param filename Filename to read from and write to
+     * @param objectMapper Provides JSON Object to/from Java Object serialization and deserialization
+     * 
+     * @throws IOException when file cannot be accessed or read from
+     */
+<span class="fc" id="L34">    public Inventory(@Value(&quot;${inventory.file}&quot;) String filename,ObjectMapper objectMapper) throws IOException {</span>
+<span class="fc" id="L35">        this.filename = filename;</span>
+<span class="fc" id="L36">        this.objectMapper = objectMapper;</span>
+<span class="fc" id="L37">        load(Product.class);</span>
+<span class="fc" id="L38">    }</span>
+
+    /**
+     * Saves the products from the map into the file as an array of JSON objects
+     * 
+     * @return true if the products were written successfully
+     * 
+     * @throws IOException when file cannot be accessed or written to
+     */
+    public boolean save() throws IOException {
+<span class="fc" id="L48">        ArrayList&lt;Product&gt; products = getProducts();</span>
+
+        // Serializes the Java Objects to JSON objects into the file
+        // writeValue will thrown an IOException if there is an issue
+        // with the file or reading from the file
+<span class="fc" id="L53">        objectMapper.writeValue(new File(filename),products.toArray());</span>
+<span class="fc" id="L54">        return true;</span>
+    }
+
+    /**
+     * Brings the inventory list
+     * @return Inventory list
+     */
+    public ArrayList&lt;Product&gt; getProducts() throws IOException {
+<span class="fc" id="L62">        return new ArrayList&lt;Product&gt;(this.data.values());</span>
+    };
+
+    /** 
+     * Gets a single product
+     * @param id The id corresponding to the product to get.
+     * @return The product that corresponds to the id. */
+    public Product getProduct(int id) throws IOException {
+<span class="fc" id="L70">        return this.data.get(id);</span>
+    }
+
+    /**
+     * User searches products in the inventory
+     * @return list of products
+     * @param name of the product
+     */
+    public ArrayList&lt;Product&gt; findProducts(String name) throws IOException {
+<span class="fc" id="L79">        ArrayList&lt;Product&gt; searchResult = new ArrayList&lt;&gt;(); </span>
+
+        // filter the inventory to find products that contain name and add them to result
+<span class="fc" id="L82">        this.data.values().stream()</span>
+<span class="fc" id="L83">        .filter(product -&gt; product.getName().contains(name))</span>
+<span class="fc" id="L84">        .forEach(searchResult::add);</span>
+
+<span class="fc" id="L86">        return searchResult;</span>
+    };
+
+    /**
+     * @param product
+     * @author Hridiza
+     * Adds a product to the inventory
+     * @throws IOException
+     */
+    public Product createProduct(Product product) throws IOException {
+<span class="fc" id="L96">        int id = nextId();</span>
+<span class="fc" id="L97">        product.setId(id);</span>
+<span class="fc" id="L98">        this.data.put(id, product);</span>
+<span class="fc" id="L99">        save();</span>
+<span class="fc" id="L100">        return product;</span>
+    }
+
+    /**
+     * Updates the product
+     * @throws IOException
+     */
+    public Product updateProduct(Product info) throws IOException {
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        if (data.containsKey(info.getId()) == false) { return null; }</span>
+<span class="fc" id="L109">        Product p = data.get(info.getId());</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        if (info.getName() != null) { p.setName(info.getName()); }</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        if (info.getDescription() != null) { p.setDescription(info.getDescription()); }</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">        if (info.getPrice() != 0) { p.setPrice(info.getPrice()); }</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        if (info.getQuantity() != 0) { p.setQuantity(info.getQuantity()); }</span>
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">        if (info.getPicture() != null) { p.setPicture(info.getPicture()); }</span>
+<span class="fc" id="L115">        save();</span>
+<span class="fc" id="L116">        return p;</span>
+    }
+
+    /**
+     * @param product
+     * @author Hridiza and Benson
+     * Removes the specified product from the inventory
+     * @throws IOException
+     */
+    public boolean removeProduct(int id) throws IOException {
+<span class="fc" id="L126">        var value = this.data.remove(id);</span>
+<span class="fc" id="L127">        save();</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        return value != null;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L133">        int size = this.data.size();</span>
+<span class="nc" id="L134">        return &quot;Inventory, # of items = &quot; + size;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

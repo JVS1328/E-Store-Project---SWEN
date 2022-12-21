@@ -1,0 +1,15 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+estore-api,com.estore.api.estoreapi.persistence,BasicPersistence,0,68,0,4,0,11,0,5,0,3
+estore-api,com.estore.api.estoreapi.persistence,Identified,0,6,0,0,0,2,0,2,0,2
+estore-api,com.estore.api.estoreapi,WebConfig,0,35,0,0,0,4,0,2,0,2
+estore-api,com.estore.api.estoreapi,EstoreApiApplication,5,3,0,0,2,1,1,1,1,1
+estore-api,com.estore.api.estoreapi,UserTokenManager,22,18,2,0,7,5,3,3,2,3
+estore-api,com.estore.api.estoreapi.model,Cart,2,32,0,0,1,11,1,6,1,6
+estore-api,com.estore.api.estoreapi.model,Registry,0,132,0,2,0,29,0,12,0,11
+estore-api,com.estore.api.estoreapi.model,Inventory,7,163,1,13,2,33,2,16,1,10
+estore-api,com.estore.api.estoreapi.model,LoginResponse,0,27,0,0,0,10,0,5,0,5
+estore-api,com.estore.api.estoreapi.model,Product,0,113,2,6,0,22,2,17,0,15
+estore-api,com.estore.api.estoreapi.model,User,21,66,0,4,2,18,2,10,2,8
+estore-api,com.estore.api.estoreapi.model,LoginRequest,5,28,1,3,1,9,1,4,0,3
+estore-api,com.estore.api.estoreapi.controller,InventoryController,0,204,0,10,0,48,0,13,0,8
+estore-api,com.estore.api.estoreapi.controller,RegistryController,22,237,0,16,6,47,0,17,0,9

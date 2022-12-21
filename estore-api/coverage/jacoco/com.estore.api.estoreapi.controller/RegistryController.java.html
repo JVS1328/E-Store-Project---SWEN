@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RegistryController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">estore-api</a> &gt; <a href="index.source.html" class="el_package">com.estore.api.estoreapi.controller</a> &gt; <span class="el_source">RegistryController.java</span></div><h1>RegistryController.java</h1><pre class="source lang-java linenums">package com.estore.api.estoreapi.controller;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.estore.api.estoreapi.persistence.RegistryDAO;
+import com.estore.api.estoreapi.UserTokenManager;
+import com.estore.api.estoreapi.model.LoginRequest;
+import com.estore.api.estoreapi.model.LoginResponse;
+import com.estore.api.estoreapi.model.Product;
+import com.estore.api.estoreapi.model.Registry;
+import com.estore.api.estoreapi.model.User;
+
+@RestController
+@RequestMapping(&quot;users&quot;)
+public class RegistryController {
+<span class="fc" id="L28">	private static final Logger LOG = Logger.getLogger(RegistryController.class.getName());</span>
+	private Registry dao;
+
+	/**
+	 * Creates a REST API controller to reponds to requests
+	 * 
+	 * @param inventoryDao The {@link UserDAO User Data Access Object} to perform
+	 *                     CRUD operations &lt;br&gt;
+	 *                     This dependency is injected by the Spring Framework
+	 */
+<span class="fc" id="L38">	public RegistryController(Registry dao) {</span>
+<span class="fc" id="L39">		this.dao = dao;</span>
+<span class="fc" id="L40">	}</span>
+
+	/**
+	 * Responds to the GET request for a {@linkplain User user} for the given id
+	 * 
+	 * @param id The id used to locate the {@link User user}
+	 * 
+	 * @return ResponseEntity with {@link User user} object and HTTP status of OK if
+	 *         found&lt;br&gt;
+	 *         ResponseEntity with HTTP status of NOT_FOUND if not found&lt;br&gt;
+	 *         ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+	 */
+	@GetMapping(&quot;/{id}&quot;)
+	public ResponseEntity&lt;User&gt; getUser(@PathVariable int id) {
+<span class="fc" id="L54">		LOG.info(&quot;GET /users/&quot; + id);</span>
+<span class="fc" id="L55">		User user = this.dao.getUser(id);</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">		if (user != null)</span>
+<span class="fc" id="L57">			return new ResponseEntity&lt;User&gt;(user, HttpStatus.OK);</span>
+		else
+<span class="fc" id="L59">			return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+	}
+
+	@GetMapping(&quot;/{token}/cart&quot;)
+	public ResponseEntity&lt;Product[]&gt; getCart(@PathVariable String token) {
+<span class="fc" id="L64">		LOG.info(&quot;GET cart from &quot; + token);</span>
+
+<span class="fc" id="L66">		User user = UserTokenManager.getUserFromToken(token);</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">		if (user == null) {</span>
+<span class="fc" id="L68">			return new ResponseEntity&lt;&gt;(HttpStatus.UNAUTHORIZED);</span>
+		}
+<span class="fc" id="L70">		ArrayList&lt;Product&gt; result = this.dao.getCartProducts(user.id);</span>
+<span class="fc" id="L71">		return new ResponseEntity&lt;Product[]&gt;(result.toArray(new Product[result.size()]), HttpStatus.OK);</span>
+	}
+
+	@PostMapping(&quot;/{type}/{token}&quot;)
+	public ResponseEntity&lt;Product&gt; saveProduct(@PathVariable String type, @PathVariable String token, @RequestBody Product product) throws IOException {
+<span class="fc" id="L76">		LOG.info(&quot;POST &quot; + type + &quot; product to cart&quot;);</span>
+<span class="fc" id="L77">		User user = UserTokenManager.getUserFromToken(token);</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">		if (user == null) {</span>
+<span class="fc" id="L79">			return new ResponseEntity&lt;&gt;(HttpStatus.UNAUTHORIZED);</span>
+		}
+<span class="fc bfc" id="L81" title="All 2 branches covered.">		if (type.equals(&quot;remove&quot;)) {</span>
+<span class="fc" id="L82">			user.getCart().removeItem(product);</span>
+		} else {
+<span class="fc" id="L84">			user.getCart().addItem(product);</span>
+		}
+		
+<span class="fc" id="L87">		this.dao.save();</span>
+<span class="fc" id="L88">		return new ResponseEntity&lt;Product&gt;(product, HttpStatus.OK);</span>
+	}
+
+	@PostMapping(&quot;/login&quot;)
+	public ResponseEntity&lt;LoginResponse&gt; loginUser(@RequestBody LoginRequest loginRequest) {
+<span class="fc" id="L93">		LOG.info(&quot;POST login&quot;);</span>
+		try {
+<span class="fc" id="L95">			User u = this.dao.getUserByUsername(loginRequest.getUsername());</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">			if (u == null) {</span>
+<span class="fc" id="L97">				return new ResponseEntity&lt;LoginResponse&gt;(new LoginResponse(&quot;&quot;, false, &quot;No such user&quot;, false),</span>
+						HttpStatus.NOT_FOUND);
+			} else {
+<span class="fc bfc" id="L100" title="All 2 branches covered.">				if (u.checkPassword(loginRequest.getPassword())) {</span>
+<span class="fc" id="L101">					String token = UserTokenManager.loginUser(u);</span>
+<span class="fc" id="L102">					return new ResponseEntity&lt;LoginResponse&gt;(new LoginResponse(token, true, &quot;Success&quot;, u.isAdmin()), HttpStatus.OK);</span>
+				} else {
+<span class="fc" id="L104">					return new ResponseEntity&lt;LoginResponse&gt;(new LoginResponse(&quot;&quot;, false, &quot;Incorrect password&quot;, false),</span>
+							HttpStatus.UNAUTHORIZED);
+				}
+			}
+<span class="nc" id="L108">		} catch (IOException e) {</span>
+<span class="nc" id="L109">			LOG.log(Level.SEVERE, e.getLocalizedMessage());</span>
+<span class="nc" id="L110">			return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+		}
+	}
+
+	/**
+	 * Register a user
+	 * 
+	 * @param loginRequest login request packet (username and password)
+	 * @return login response containing token
+	 * @author Paul Harrison
+	 */
+	@PostMapping(&quot;/register&quot;)
+	public ResponseEntity&lt;LoginResponse&gt; registerUser(@RequestBody LoginRequest loginRequest) {
+<span class="fc" id="L123">		LOG.info(&quot;POST register&quot;);</span>
+		try {
+<span class="fc" id="L125">			User u = this.dao.getUserByUsername(loginRequest.getUsername());</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">			if (u == null) {</span>
+<span class="fc" id="L127">				User newu = new User(loginRequest.getUsername(), loginRequest.getPassword());</span>
+<span class="fc" id="L128">				User daou = this.dao.createUser(newu);</span>
+<span class="fc" id="L129">				String token = UserTokenManager.loginUser(daou);</span>
+<span class="fc" id="L130">				return new ResponseEntity&lt;LoginResponse&gt;(new LoginResponse(token, true, &quot;&quot;, false), HttpStatus.CREATED);</span>
+			} else {
+<span class="fc" id="L132">				return new ResponseEntity&lt;LoginResponse&gt;(new LoginResponse(&quot;&quot;, false, &quot;User exists&quot;, false),</span>
+						HttpStatus.CONFLICT);
+			}
+<span class="nc" id="L135">		} catch (IOException e) {</span>
+<span class="nc" id="L136">			LOG.log(Level.SEVERE, e.getLocalizedMessage());</span>
+<span class="nc" id="L137">			return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+		}
+	}
+
+	@GetMapping(&quot;/{token}/logout&quot;)
+	public ResponseEntity&lt;String&gt; logoutUser(@PathVariable String token) {
+<span class="fc" id="L143">		LOG.info(&quot;GET logout&quot;);</span>
+<span class="fc" id="L144">		UserTokenManager.logoutUser(token);</span>
+<span class="fc" id="L145">		return new ResponseEntity&lt;String&gt;(&quot;{\&quot;message\&quot;: \&quot;logged out\&quot;}&quot;, HttpStatus.OK);</span>
+	}
+	
+	@GetMapping(&quot;/{token}/alive&quot;)
+	public ResponseEntity&lt;String&gt; checkAlive(@PathVariable String token) {
+<span class="fc" id="L150">		LOG.info(&quot;GET alive&quot;);</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">		if (UserTokenManager.getUserFromToken(token) == null) {</span>
+<span class="fc" id="L152">			return new ResponseEntity&lt;String&gt;(&quot;{\&quot;alive\&quot;: false}&quot;, HttpStatus.OK);</span>
+		} else {
+<span class="fc" id="L154">			return new ResponseEntity&lt;String&gt;(&quot;{\&quot;alive\&quot;: true}&quot;, HttpStatus.OK);</span>
+		}
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

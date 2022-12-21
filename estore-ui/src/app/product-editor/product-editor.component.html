@@ -1,0 +1,21 @@
+<div *ngIf="error">
+	<h1>ERROR</h1>
+	<p>{{error.message}}</p>
+</div>
+
+<div class="product-editor" *ngIf="product">
+	<label for="productid">ID</label>
+	<input type="number" value="{{product.id}}" name="productid" disabled><br>
+	<label for="productname">Name</label>
+	<input type="text" [(ngModel)]="product.name" name="productname"><br>
+	<label for="productdescription">Description</label>
+	<input type="text" [(ngModel)]="product.description" name="productdescription"><br>
+	<label for="productprice"Price>Price</label>
+	<input type="text" [(ngModel)]="product.price" name="productprice"><br>
+	<label for="productquantity">Quantity</label>
+	<input type="number" [(ngModel)]="product.quantity" name="productquantity"><br>
+	<label for="productpicture">Picture (EXTERNAL URL)</label>
+	<input type="text" [(ngModel)]="product.picture" name="productpicture" placeholder="https://x.org/whatever"><br>
+	<button (click)="save()">Save</button>
+	<button (click)="delete()">Delete</button>
+</div>

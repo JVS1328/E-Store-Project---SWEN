@@ -1,0 +1,11 @@
+<div class = "nav">
+	<img src = "assets/logo.png" class="logo">
+	<ul class = "nav-items">
+		<a href="/" #home_link><li [ngClass]="{active: current == home_link.pathname}">Home</li></a>
+		<a #products_link href="/products"><li [ngClass]="{active: current == products_link.pathname}">Products</li></a>
+		<a *ngIf="UAM.loggedIn() && UAM.isAdmin()" #cart_link href="/cart"><li [ngClass]="{active: current == cart_link.pathname}">Cart</li></a>
+		<a #login_link *ngIf="!UAM.loggedIn()" href="/login?next={{currentHref()}}"><li [ngClass]="{active: current.includes(login_link.pathname)}">Login/Sign up</li></a>
+		<a *ngIf="UAM.loggedIn()" (click)="logout()"><li>Logout</li></a>
+	</ul>
+	<!--<nav-search></nav-search>-->
+</div>

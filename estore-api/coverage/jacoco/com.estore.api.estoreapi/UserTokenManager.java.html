@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserTokenManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">estore-api</a> &gt; <a href="index.source.html" class="el_package">com.estore.api.estoreapi</a> &gt; <span class="el_source">UserTokenManager.java</span></div><h1>UserTokenManager.java</h1><pre class="source lang-java linenums">package com.estore.api.estoreapi;
+
+import java.util.HashMap;
+import java.util.UUID;
+
+import com.estore.api.estoreapi.model.User;
+
+/**
+ * Manages user sessions
+ * @author Paul Harrison
+ *
+ */
+<span class="fc" id="L13">public class UserTokenManager {</span>
+<span class="fc" id="L14">	static HashMap&lt;UUID, User&gt; tokenmap = new HashMap&lt;UUID, User&gt;();</span>
+	
+	/**
+	 * Registers a session token for a user
+	 * @param user user that is logging in
+	 * @return session token for user
+	 */
+	public static String loginUser(User user) {
+<span class="fc" id="L22">		UUID uuid = UUID.randomUUID();</span>
+<span class="fc" id="L23">		tokenmap.put(uuid, user);</span>
+<span class="fc" id="L24">		return uuid.toString();</span>
+	}
+	
+	/**
+	 * Gets user by token
+	 * @param token user token
+	 * @return the user
+	 */
+	public static User getUserFromToken(String token) {
+<span class="nc" id="L33">		UUID uuid = UUID.fromString(token);</span>
+		
+<span class="nc bnc" id="L35" title="All 2 branches missed.">		if (tokenmap.containsKey(uuid)) {</span>
+<span class="nc" id="L36">			User u = tokenmap.get(uuid);</span>
+<span class="nc" id="L37">			return u;</span>
+		} else {
+<span class="nc" id="L39">			return null;</span>
+		}
+	}
+	
+	/**
+	 * Logs user out by token
+	 * @param token user token
+	 */
+	public static void logoutUser(String token) {
+<span class="nc" id="L48">		tokenmap.remove(UUID.fromString(token));</span>
+<span class="nc" id="L49">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

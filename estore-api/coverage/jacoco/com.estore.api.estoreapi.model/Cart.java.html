@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Cart.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">estore-api</a> &gt; <a href="index.source.html" class="el_package">com.estore.api.estoreapi.model</a> &gt; <span class="el_source">Cart.java</span></div><h1>Cart.java</h1><pre class="source lang-java linenums">package com.estore.api.estoreapi.model;
+import java.util.ArrayList;
+import java.util.logging.Logger;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+/**
+ * Represents a Cart object.
+ * 
+ * @author John Skorcik, Paul Harrison
+ */
+public class Cart {
+<span class="fc" id="L12">    private static final Logger LOG = Logger.getLogger(Cart.class.getName());</span>
+    private static final String STRING_FORMAT = &quot;Cart&quot;;
+
+    @JsonProperty(&quot;items&quot;) private ArrayList&lt;Product&gt; items;
+
+    /**
+     * Create a cart.
+     * 
+     * {@literal @}JsonProperty is used in serialization and deserialization
+     * of the JSON object to the Java object in mapping the fields.  If a field
+     * is not provided in the JSON object, the Java field gets the default Java
+     * value, i.e. 0 for int
+     */
+<span class="fc" id="L25">    public Cart() {</span>
+<span class="fc" id="L26">        this.items = new ArrayList&lt;Product&gt;();</span>
+<span class="fc" id="L27">    }</span>
+
+    /**
+     * Sets the name of the product - necessary for JSON object to Java object deserialization
+     * @param name The name of the product
+     */
+    public void setItems(ArrayList&lt;Product&gt; items) {
+<span class="fc" id="L34">    	this.items = items;</span>
+<span class="fc" id="L35">    }</span>
+
+    /**
+     * Retrieves the name of the product
+     * @return The name of the product
+     */
+    public ArrayList&lt;Product&gt; getItems() {
+<span class="fc" id="L42">    	return this.items;</span>
+    }
+
+    /**
+     * Add item to cart
+     * @param product	the product to add to the cart
+     */
+    public void addItem(Product product) {
+<span class="fc" id="L50">    	this.items.add(product);</span>
+<span class="fc" id="L51">    }</span>
+
+    /**
+     * Remove item from cart
+     * @param product	the product to remove from the cart
+     */
+    public void removeItem(Product product) {
+<span class="fc" id="L58">    	this.items.remove(product);</span>
+<span class="fc" id="L59">    }</span>
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+<span class="nc" id="L66">        return STRING_FORMAT;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

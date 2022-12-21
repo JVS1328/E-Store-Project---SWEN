@@ -1,0 +1,43 @@
+
+.product-list {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-evenly;
+}
+
+.product-card {
+	position: relative;
+	flex: 0 30%;
+	height: 200px;
+	border: 0px solid transparent;
+	border-radius: 16px;
+	background-size: cover;
+}
+
+.product-details {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	color: white;
+	padding: 8px;
+	width: 100%;
+}
+
+.product-edit-button {
+	position: absolute;
+	right: 25px;
+	top: 0;
+	border-color: red;
+	color: red;
+	background: transparent;
+}
+
+.product-edit-button:hover {
+	background: red;
+	border-color: white;
+	color: white;
+}
+
+#heading {
+	text-align: center;
+}

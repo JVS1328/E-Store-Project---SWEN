@@ -1,0 +1,73 @@
+.form {
+    text-align: center;
+    border: solid #000 1px;
+    border-radius: 10px;
+    width: 40%;
+    padding: 0;
+    margin: 5% auto;
+    background-color: var(--primary-light);
+}
+
+.options {
+    list-style: none;
+    margin: 0;
+    margin-bottom: 10%;
+}
+
+.options li {
+    display: inline-block;
+    width: 50%;
+    padding: 4% 0;
+    margin: 0;
+    font-size: 1.5em;
+    background-color: var(--primary-color);
+    color: var(--text-color-light);
+}
+
+.options li:hover {
+    background-color: var(--primary-light) !important;
+    color: var(--text-color-dark) !important;
+    cursor: pointer;
+}
+
+.options .right {
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.options .left {
+    border-top-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.form-item {
+    display: block;
+    margin: 5% auto;
+    padding: 2%;
+    width: 75%;
+    font-size: 1.1em;
+    border-radius: 50px;
+    background-color: var(--body-bg);
+}
+
+.submit-btn {
+    padding: 2% 4%;
+    margin-bottom: 5%;
+    font-size: 1.2em;
+    background-color: var(--primary-color);
+    color: var(--text-color-light);
+    border-radius: 50px;
+    border-width: 0;
+}
+
+.submit-btn:hover {
+    background-color: #fff;
+    outline: solid var(--primary-color) 2px;
+    color: var(--text-color-dark);
+    cursor: pointer;
+}
+
+.active {
+    background-color: var(--primary-light) !important;
+    color: var(--text-color-dark) !important;
+}

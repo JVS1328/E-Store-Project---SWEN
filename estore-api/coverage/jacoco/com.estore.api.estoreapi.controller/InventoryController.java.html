@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InventoryController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">estore-api</a> &gt; <a href="index.source.html" class="el_package">com.estore.api.estoreapi.controller</a> &gt; <span class="el_source">InventoryController.java</span></div><h1>InventoryController.java</h1><pre class="source lang-java linenums">package com.estore.api.estoreapi.controller;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import java.util.ArrayList;
+
+import com.estore.api.estoreapi.persistence.InventoryDAO;
+import com.estore.api.estoreapi.model.Inventory;
+import com.estore.api.estoreapi.model.Product;
+
+/**
+ * Handles the REST API requests for the product resource
+ * &lt;p&gt;
+ * {@literal @}RestController Spring annotation identifies this class as a REST API
+ * method handler to the Spring framework
+ * 
+ * @author SWEN Faculty
+ * @author Benson Haley (bah8454)
+ */
+
+@RestController
+@RequestMapping(&quot;products&quot;)
+public class InventoryController {
+<span class="fc" id="L38">    private static final Logger LOG = Logger.getLogger(InventoryController.class.getName());</span>
+    private Inventory dao;
+
+    /**
+     * Creates a REST API controller to reponds to requests
+     * 
+     * @param inventoryDao The {@link InventoryDAO Inventory Data Access Object} to perform CRUD operations
+     * &lt;br&gt;
+     * This dependency is injected by the Spring Framework
+     */
+<span class="fc" id="L48">    public InventoryController(Inventory dao) {</span>
+<span class="fc" id="L49">        this.dao = dao;</span>
+<span class="fc" id="L50">    }</span>
+
+    /**
+     * Responds to the GET request for a {@linkplain Product product} for the given id
+     * 
+     * @param id The id used to locate the {@link Product product}
+     * 
+     * @return ResponseEntity with {@link Product product} object and HTTP status of OK if found&lt;br&gt;
+     * ResponseEntity with HTTP status of NOT_FOUND if not found&lt;br&gt;
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     */
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Product&gt; getProduct(@PathVariable int id) {
+<span class="fc" id="L63">        LOG.info(&quot;GET /products/&quot; + id);</span>
+        try {
+<span class="fc" id="L65">            Product product = this.dao.getProduct(id);</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">            if (product != null)</span>
+<span class="fc" id="L67">                return new ResponseEntity&lt;Product&gt;(product,HttpStatus.OK);</span>
+            else
+<span class="fc" id="L69">                return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+        }
+<span class="fc" id="L71">        catch(Exception e) {</span>
+<span class="fc" id="L72">            LOG.log(Level.SEVERE,e.getLocalizedMessage());</span>
+<span class="fc" id="L73">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * Responds to the GET request for all {@linkplain Product productes}
+     * 
+     * @return ResponseEntity with array of {@link Product product} objects (may be empty) and
+     * HTTP status of OK&lt;br&gt;
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     */
+    @GetMapping(&quot;&quot;)
+    public ResponseEntity&lt;ArrayList&lt;Product&gt;&gt; getProducts() {
+<span class="fc" id="L86">        LOG.info(&quot;GET /products&quot;);</span>
+
+        try {
+<span class="fc" id="L89">            ArrayList&lt;Product&gt; products = this.dao.getProducts();</span>
+
+<span class="fc" id="L91">            return new ResponseEntity&lt;ArrayList&lt;Product&gt;&gt;(products, HttpStatus.OK);</span>
+
+<span class="fc" id="L93">        } catch(Exception e) {</span>
+<span class="fc" id="L94">            LOG.log(Level.SEVERE,e.getLocalizedMessage());</span>
+<span class="fc" id="L95">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+
+    }
+
+    /**
+     * Responds to the GET request for all {@linkplain Product productes} whose name contains
+     * the text in name
+     * 
+     * @param name The name parameter which contains the text used to find the {@link Product productes}
+     * 
+     * @return ResponseEntity with array of {@link Product product} objects (may be empty) and
+     * HTTP status of OK&lt;br&gt;
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     * &lt;p&gt;
+     * Example: Find all productes that contain the text &quot;ma&quot;
+     * GET http://localhost:8080/productes/?name=ma
+     */
+    @GetMapping(&quot;/&quot;)
+    public ResponseEntity&lt;ArrayList&lt;Product&gt;&gt; searchProducts(@RequestParam String name) {
+<span class="fc" id="L115">        LOG.info(&quot;GET /products/?name=&quot;+name);</span>
+
+        try {
+<span class="fc" id="L118">            ArrayList&lt;Product&gt; products = this.dao.findProducts(name);</span>
+
+<span class="fc" id="L120">            return new ResponseEntity&lt;ArrayList&lt;Product&gt;&gt;(products, HttpStatus.OK);</span>
+
+<span class="fc" id="L122">        } catch(Exception e) {</span>
+<span class="fc" id="L123">            LOG.log(Level.SEVERE,e.getLocalizedMessage());</span>
+<span class="fc" id="L124">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * Creates a {@linkplain Product product} with the provided product object
+     * 
+     * @param product - The {@link Product product} to create
+     * 
+     * @return ResponseEntity with created {@link Product product} object and HTTP status of CREATED&lt;br&gt;
+     * ResponseEntity with HTTP status of CONFLICT if {@link Product product} object already exists&lt;br&gt;
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     */
+    @PostMapping(&quot;&quot;)
+    public ResponseEntity&lt;Product&gt; createProduct(@RequestBody Product product) {
+<span class="fc" id="L139">        LOG.info(&quot;POST /products &quot; + product);</span>
+
+        try {
+<span class="fc bfc" id="L142" title="All 2 branches covered.">            if (this.dao.findProducts(product.getName()).size() != 0) {</span>
+<span class="fc" id="L143">                return new ResponseEntity&lt;&gt;(HttpStatus.CONFLICT);</span>
+            }
+
+<span class="fc" id="L146">            Product result = this.dao.createProduct(product);</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">            if (result == null) {</span>
+<span class="fc" id="L148">                return new ResponseEntity&lt;&gt;(HttpStatus.CONFLICT);</span>
+            }
+<span class="fc" id="L150">            return new ResponseEntity&lt;Product&gt;(result, HttpStatus.CREATED); </span>
+
+<span class="fc" id="L152">        } catch(Exception e) {</span>
+<span class="fc" id="L153">            LOG.log(Level.SEVERE,e.getLocalizedMessage());</span>
+<span class="fc" id="L154">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * Updates the {@linkplain Product product} with the provided {@linkplain Product product} object, if it exists
+     * 
+     * @param product The {@link Product product} to update
+     * 
+     * @return ResponseEntity with updated {@link Product product} object and HTTP status of OK if updated&lt;br&gt;
+     * ResponseEntity with HTTP status of NOT_FOUND if not found&lt;br&gt;
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     */
+    @PutMapping(&quot;&quot;)
+    public ResponseEntity&lt;Product&gt; updateProduct(@RequestBody Product product) {
+<span class="fc" id="L169">        LOG.info(&quot;PUT /products &quot; + product);</span>
+
+        try {
+
+<span class="fc" id="L173">            Product result = this.dao.updateProduct(product);</span>
+<span class="fc bfc" id="L174" title="All 2 branches covered.">            if (result == null) { return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND); }</span>
+<span class="fc" id="L175">            return new ResponseEntity&lt;Product&gt;(result, HttpStatus.OK); </span>
+
+<span class="fc" id="L177">        } catch(Exception e) {</span>
+<span class="fc" id="L178">            LOG.log(Level.SEVERE,e.getLocalizedMessage());</span>
+<span class="fc" id="L179">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * Deletes a {@linkplain Product product} with the given id
+     * 
+     * @param id The id of the {@link Product product} to deleted
+     * 
+     * @return ResponseEntity HTTP status of OK if deleted&lt;br&gt;
+     * ResponseEntity with HTTP status of NOT_FOUND if not found&lt;br&gt;
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     */
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Product&gt; deleteProduct(@PathVariable int id) {
+<span class="fc" id="L194">        LOG.info(&quot;DELETE /products/&quot; + id);</span>
+
+        try {
+
+<span class="fc" id="L198">            boolean result = this.dao.removeProduct(id);</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">            if (result == false) { return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND); }</span>
+<span class="fc" id="L200">            return new ResponseEntity&lt;&gt;(HttpStatus.OK); </span>
+
+<span class="fc" id="L202">        } catch(IOException e) {</span>
+<span class="fc" id="L203">            LOG.log(Level.SEVERE,e.getLocalizedMessage());</span>
+<span class="fc" id="L204">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    // @GetMapping(&quot;/bid/{id}/{end}&quot;)
+    // public ResponseEntity&lt;Product&gt; getBid(@PathVariable int id, @PathVariable int end) {
+    //     try {
+
+    //         return new ResponseEntity&lt;&gt;(this.dao.getProduct(id), HttpStatus.OK);
+
+    //     } catch(Exception e) {
+    //         LOG.log(Level.SEVERE,e.getLocalizedMessage());
+    //         return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);
+    //     }
+        
+    // }
+
+    // @PostMapping(&quot;/bid/{id}&quot;)
+    // public ResponseEntity&lt;Integer&gt; newBid(@PathVariable int id, @RequestBody int end) {
+    //     try {
+    //         Product product = this.dao.getProduct(id);
+    //         product.bidEnd = end;
+    //         //product.bidUser = user;
+    //         this.dao.save();
+    //         return new ResponseEntity&lt;&gt;(id, HttpStatus.OK);
+
+    //     } catch(IOException e) {
+    //         LOG.log(Level.SEVERE,e.getLocalizedMessage());
+    //         return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);
+    //     }
+    // }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,18 @@
+nav {
+	background: #369;
+}
+
+nav, nav a {
+	color: #fff;
+}
+
+nav ul {
+	display: inline;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+nav ul li {
+	display: inline;
+}
